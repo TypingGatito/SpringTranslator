@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Translate</title>
+</head>
+<body>
+
+<form th:method="GET" th:action="@{/translate}" th:object="${request}">
+    <label for="from">From</label>
+    <input type="text" th:field="*{from}" id="from"/>
+    <br/>
+    <label for="to">To</label>
+    <input type="text" th:field="*{to}" id="to"/>
+    <br/>
+    <label for="text">Text</label>
+    <input type="text" th:field="*{text}" id="text"/>
+    <br/>
+    <label for="tr_text">Translated</label>
+    <input type="text" th:field="*{translatedText}" id="tr_text"/>
+    <br/>
+    <input style="color: darkred" type="submit" value="Translate"/>
+</form>
+
+</body>
+</html>
