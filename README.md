@@ -1,8 +1,7 @@
 # Spring Translator
 
 ## Технологии
-- Java 11
-- Spring Boot
+- Java 20
 - Spring Data JPA
 - JDBC
 - PostgreSQL
@@ -10,8 +9,7 @@
 ## Запуск проекта
 1. Склонируйте репозиторий:
     ```
-    git clone https://github.com/yourusername/translation-service.git
-    cd translation-service
+    https://github.com/TypingGatito/SpringTranslator
     ```
 
 2. Настройте базу данных:
