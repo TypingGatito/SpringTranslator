@@ -9,7 +9,7 @@
 ## Запуск проекта
 1. Склонируйте репозиторий:
     ```
-    https://github.com/TypingGatito/SpringTranslator
+    git clone https://github.com/TypingGatito/SpringTranslator
     ```
 
 2. Настройте базу данных:
