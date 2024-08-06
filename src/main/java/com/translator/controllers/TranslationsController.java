@@ -5,21 +5,14 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.common.collect.BiMap;
 import com.translator.third_party_connections.TranslationConnection;
 import jakarta.servlet.http.HttpServletRequest;
-import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.scheduling.annotation.Async;
 import org.springframework.web.bind.annotation.*;
 import com.translator.DAO.TranslationDAO;
 import java.io.BufferedReader;
 import java.io.IOException;
-import java.io.UnsupportedEncodingException;
-import java.net.URLDecoder;
-import java.net.URLEncoder;
-
-import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -29,9 +22,6 @@ import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.Future;
 import java.util.stream.Collectors;
-
-import static java.nio.charset.StandardCharsets.ISO_8859_1;
-import static java.nio.charset.StandardCharsets.UTF_8;
 
 
 @RestController
@@ -136,7 +126,7 @@ public class TranslationsController {
     }
 
     @PostMapping("/translateT")
-    public ResponseEntity<String> translate2(HttpServletRequest request) throws InterruptedException {
+    public ResponseEntity<String> translateT(HttpServletRequest request) throws InterruptedException {
         HttpHeaders headers = new HttpHeaders();
         headers.set("Content-Type", "text/plain;charset=UTF-8");
 

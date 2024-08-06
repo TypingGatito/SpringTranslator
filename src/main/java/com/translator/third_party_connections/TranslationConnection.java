@@ -9,11 +9,10 @@ import com.google.common.collect.HashBiMap;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.http.ResponseEntity;
-import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Component;
 import org.springframework.web.client.RestTemplate;
-
 import java.util.Map;
+
 
 @Component
 public class TranslationConnection {
@@ -27,7 +26,7 @@ public class TranslationConnection {
         this.restTemplate = restTemplate;
     }
 
-    public String translateWord(String from, String to, String word) throws JsonProcessingException {
+    public String translateWord(String from, String to, String word) {
         if (word.equals("")) return word;
         String apiUrl = source + "/translate" + "?sl=" + from
                 + "&dl=" + to + "&text=" + word;
@@ -36,7 +35,12 @@ public class TranslationConnection {
         String bodyJSON = response.getBody();
 
         ObjectMapper objectMapper = new ObjectMapper();
-        JsonNode rootNode = objectMapper.readTree(bodyJSON);
+        JsonNode rootNode = null;
+        try {
+            rootNode = objectMapper.readTree(bodyJSON);
+        } catch (JsonProcessingException e) {
+            throw new RuntimeException(e);
+        }
 
         String value = rootNode.path("destination-text").asText();
 
