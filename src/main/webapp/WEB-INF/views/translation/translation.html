@@ -6,7 +6,7 @@
 </head>
 <body>
 
-<form th:method="GET" th:action="@{/translate}" th:object="${request}">
+<form th:method="GET" th:action="@{/}" th:object="${request}">
     <label for="from">From</label>
     <input type="text" th:field="*{from}" id="from"/>
     <br/>
@@ -14,10 +14,10 @@
     <input type="text" th:field="*{to}" id="to"/>
     <br/>
     <label for="text">Text</label>
-    <input type="text" th:field="*{text}" id="text"/>
+    <textarea type="text" th:field="*{text}" id="text"></textarea>
     <br/>
     <label for="tr_text">Translated</label>
-    <input type="text" th:field="*{translatedText}" id="tr_text"/>
+    <textarea type="text" th:field="*{translatedText}" id="tr_text"></textarea>
     <br/>
     <input style="color: darkred" type="submit" value="Translate"/>
 </form>

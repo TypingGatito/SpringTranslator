@@ -1,15 +1,12 @@
 package com.translator.controllers;
 
-import com.fasterxml.jackson.databind.JsonNode;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import com.translator.models.TranslationRequest;
+import com.translator.third_party_connections.TranslationConnection;
 import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.client.RestTemplate;
 import com.translator.DAO.TranslationDAO;
 import java.util.ArrayList;
 import java.util.List;
@@ -18,11 +15,10 @@ import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.Future;
 
-
 @Controller
 public class TranslationsControllerWeb {
 
-    private RestTemplate restTemplate;
+    private TranslationConnection translationConnection;
 
     private final TranslationDAO translationDAO;
 
@@ -30,21 +26,17 @@ public class TranslationsControllerWeb {
     private ExecutorService executor = Executors.newFixedThreadPool(10);
 
     @Autowired
-    public TranslationsControllerWeb(TranslationDAO translationDAO, RestTemplate restTemplate) {
+    public TranslationsControllerWeb(TranslationDAO translationDAO, TranslationConnection translationConnection) {
         this.translationDAO = translationDAO;
-        this.restTemplate = restTemplate;
+        this.translationConnection = translationConnection;
     }
 
     @GetMapping
-    public String index(Model model) throws InterruptedException {
-        model.addAttribute("request", new TranslationRequest());
-
-        return "translation/translation";
-    }
-
-    @GetMapping("/translate")
     public String translate(@ModelAttribute("request") TranslationRequest translationRequest,
                             HttpServletRequest request) throws InterruptedException {
+        if (translationRequest == null ||
+            translationRequest.getFrom() == null|| translationRequest.getTo() == null ||
+            translationRequest.getText() == null) return "translation/translation";
         String[] words = translationRequest.getText().split(" ");
         StringBuilder translatedText = new StringBuilder();
 
@@ -52,17 +44,9 @@ public class TranslationsControllerWeb {
 
         for (String word : words) {
             Future<String> future = executor.submit(() -> {
-                String apiUrl = "https://ftapi.pythonanywhere.com//translate?sl=" + translationRequest.getFrom()
-                        + "&dl=" + translationRequest.getTo() + "&text=" + word;
-
-                String response = restTemplate.getForObject(apiUrl, String.class);
-
-                ObjectMapper objectMapper = new ObjectMapper();
-                JsonNode rootNode = objectMapper.readTree(response);
-
-                String value = rootNode.path("destination-text").asText();
-
-                return value;
+                return translationConnection.translateWord(translationRequest.getFrom(),
+                        translationRequest.getTo(),
+                        word);
             });
             futures.add(future);
         }
